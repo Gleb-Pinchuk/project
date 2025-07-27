@@ -4,7 +4,7 @@
 ## установка
 1. клонируйте репозиторий:
 ```
-git clone https://github.com/Gleb-Pinchuk/project.git
+[git clone](https://github.com/Gleb-Pinchuk/project.git)
 ```
 ## Лицензия:
 этот проект лицензирован по [лицензии MIT] (LICENSE).

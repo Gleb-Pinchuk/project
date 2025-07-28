@@ -18,6 +18,3 @@ def get_mask_account(account_number: Union[int, str]) -> str:
         mask_account = f"Счет **{account_number[-4:]}"
         return mask_account
     return "Некорректный ввод"
-
-
-

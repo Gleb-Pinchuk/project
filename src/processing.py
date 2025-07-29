@@ -18,4 +18,7 @@ def filter_by_state(list_of_dict: list, state="EXECUTED") -> list:
 def sort_by_date(data_list: list, data_key="date", descending=True) -> list:
     """Функция, возвращает список, отсортированный по дате"""
 
-    return sorted(data_list, key=lambda x: datetime(x[data_key], "%Y-%m-%dT%H:%M:%S.%f"), reverse=descending)
+    
+    return sorted(data_list, key=lambda x: datetime.strptime(x[data_key], "%Y-%m-%dT%H:%M:%S.%f"), reverse=descending)
+
+

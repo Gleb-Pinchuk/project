@@ -1,4 +1,4 @@
-from src.widget import mask_account_card
+from src.widget import mask_account_card, get_date
 import pytest
 
 
@@ -15,5 +15,10 @@ def test_mask_account_card(account, expected):
 
 @pytest.mark.parametrize(
     'date, expected',
-
+    [('2024-03-11T02:26:18.671407', '11.03.2024'),
+     ('2022-05-12', '12.05.2022'),
+     ('2024-03-11T02:26', '11.03.2024')]
 )
+def test_get_date(date, expected):
+    result = get_date(date)
+    assert result == expected

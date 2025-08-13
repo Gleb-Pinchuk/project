@@ -1,11 +1,12 @@
 import json
 import os
+from typing import Any, Dict, List
 
 
-def load_transactions(file_path: str):
+def load_transactions(file_path: str) -> List[Dict[str, Any]]:
     """
     Загружает список транзакций из JSON-файла.
-
+    Если файл не найден, пустой или содержит не список — возвращает пустой список.
     """
     if not os.path.exists(file_path):
         return []
@@ -17,6 +18,9 @@ def load_transactions(file_path: str):
                 return []
 
             data = json.loads(content)
-            return data if isinstance(data, list) else []
+            if isinstance(data, list):
+                # Проверяем, что каждый элемент — словарь
+                return [item for item in data if isinstance(item, dict)]
+            return []
     except (json.JSONDecodeError, OSError):
         return []

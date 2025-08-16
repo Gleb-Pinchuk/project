@@ -30,4 +30,3 @@ def test_unsupported_currency() -> None:
     tx = {"operationAmount": {"amount": "50", "currency": {"code": "GBP"}}}
     with pytest.raises(ValueError):
         convert_transaction(tx)
-

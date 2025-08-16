@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 API_KEY: str | None = os.getenv("EXCHANGE_API_KEY")
-URL = "https://drive.google.com/file/d/1C0bUdTxUhck-7BoqXSR1wIEp33BH5YXy/view?pli=1"
+URL = 'https://api.apilayer.com/exchangerates_data/convert'
 
 
 def convert_transaction(transaction: dict[str, Any]) -> float:
@@ -46,4 +46,3 @@ def convert_transaction(transaction: dict[str, Any]) -> float:
         return float(data["result"])
 
     raise ValueError(f"Неподдерживаемая валюта: {currency}")
-

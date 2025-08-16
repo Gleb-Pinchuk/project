@@ -42,4 +42,5 @@ def load_transactions(file_path: str) -> List[Dict[str, Any]]:
         return []
 
 
-print(load_transactions("data"))
+transactions = load_transactions("data/operations.json")
+print(transactions)

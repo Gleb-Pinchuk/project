@@ -1,50 +1,49 @@
 import os
-from dotenv import load_dotenv
+from typing import Any
 import requests
+from dotenv import load_dotenv
 
 load_dotenv()
-API_KEY = os.getenv("EXCHANGE_API_KEY")
-BASE_URL = "https://api.apilayer.com/exchangerates_data/convert"
+API_KEY: str | None = os.getenv("EXCHANGE_API_KEY")
+URL = "https://drive.google.com/file/d/1C0bUdTxUhck-7BoqXSR1wIEp33BH5YXy/view?pli=1"
 
 
-def convert_currency(amount: float, from_currency: str, to_currency: str = "RUB") -> float:
+def convert_transaction(transaction: dict[str, Any]) -> float:
     """
-    Конвертирует сумму из одной валюты в другую с использованием API.
+    Принимает транзакцию и возвращает сумму в рублях.
 
-    """
-    if not API_KEY:
-        raise EnvironmentError("API ключ не найден в переменных окружения")
-
-    params = {
-        "to": str(to_currency),
-        "from": str(from_currency),
-        "amount": str(amount),
-    }
-    headers = {"apikey": API_KEY}
-    response = requests.get(BASE_URL, params=params, headers=headers)
-    response.raise_for_status()
-    data = response.json()
-
-    if "result" not in data:
-        raise ValueError("Ошибка ответа API: ключ 'result' отсутствует")
-
-    return float(data["result"])
-
-
-def transaction_amount(transaction: dict) -> float:
-    """
-    Возвращает сумму транзакции в рублях.
-
+    - Если валюта RUB — возвращает исходное значение.
+    - Если валюта USD или EUR — конвертирует в рубли через API.
+    - Если транзакция пустая или валюта не поддерживается — ошибка.
     """
     if not transaction:
         raise ValueError("Пустая транзакция")
 
-    amount = float(transaction["operationAmount"]["amount"])
-    currency = transaction["operationAmount"]["currency"]["code"]
+    amount: float = float(transaction["operationAmount"]["amount"])
+    currency: str = transaction["operationAmount"]["currency"]["code"]
 
     if currency == "RUB":
         return amount
-    elif currency in ("USD", "EUR"):
-        return convert_currency(amount, currency)
-    else:
-        raise ValueError(f"Неподдерживаемая валюта: {currency}")
+
+    if currency in ("USD", "EUR"):
+        if not API_KEY:
+            raise EnvironmentError("API ключ не найден в переменных окружения")
+
+        params: dict[str, str] = {
+            "to": "RUB",
+            "from": currency,
+            "amount": str(amount),
+        }
+        headers: dict[str, str] = {"apikey": API_KEY}
+
+        response = requests.get(URL, params=params, headers=headers)
+        response.raise_for_status()
+        data: dict[str, Any] = response.json()
+
+        if "result" not in data:
+            raise ValueError("Ошибка ответа API: ключ 'result' отсутствует")
+
+        return float(data["result"])
+
+    raise ValueError(f"Неподдерживаемая валюта: {currency}")
+

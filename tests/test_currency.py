@@ -1,26 +1,33 @@
 import pytest
 from unittest.mock import patch
-from src.external_api import transaction_amount
+from src.external_api import convert_transaction
 
 
-@patch("external_api.currency.convert_currency", return_value=7500.0)
-def test_transaction_usd(mock_convert):
-    tx = {"operationAmount": {"amount": "100", "currency": {"code": "USD"}}}
-    assert transaction_amount(tx) == 7500.0
-    mock_convert.assert_called_once_with(100.0, "USD")
-
-
-def test_transaction_rub():
+def test_convert_rub_transaction() -> None:
     tx = {"operationAmount": {"amount": "123.45", "currency": {"code": "RUB"}}}
-    assert transaction_amount(tx) == 123.45
+    assert convert_transaction(tx) == 123.45
 
 
-def test_empty_transaction():
+@patch("src.external_api.requests.get")
+def test_convert_usd_transaction(mock_get) -> None:
+    # Настраиваем фейковый ответ API
+    mock_get.return_value.status_code = 200
+    mock_get.return_value.json.return_value = {"result": 7500.0}
+
+    tx = {"operationAmount": {"amount": "100", "currency": {"code": "USD"}}}
+    result = convert_transaction(tx)
+
+    assert result == 7500.0
+    mock_get.assert_called_once()
+
+
+def test_empty_transaction() -> None:
     with pytest.raises(ValueError):
-        transaction_amount({})
+        convert_transaction({})
 
 
-def test_unsupported_currency():
+def test_unsupported_currency() -> None:
     tx = {"operationAmount": {"amount": "50", "currency": {"code": "GBP"}}}
     with pytest.raises(ValueError):
-        transaction_amount(tx)
+        convert_transaction(tx)
+

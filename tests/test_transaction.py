@@ -1,5 +1,7 @@
-import pandas as pd
 from unittest.mock import patch
+
+import pandas as pd
+
 from src.transaction import read_transactions_from_csv, read_transactions_from_excel
 
 csv_file = "C:/Users/ghlie/Downloads/transactions.csv"

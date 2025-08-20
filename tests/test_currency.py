@@ -1,5 +1,7 @@
+from unittest.mock import mock_open, patch
+
 import pytest
-from unittest.mock import patch, mock_open
+
 from src.external_api import convert_transaction
 from src.utils import load_transactions
 

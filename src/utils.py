@@ -1,8 +1,9 @@
 import json
+import logging
 import os
 from typing import Any, Dict, List
+
 from src.masks import LOG_FILE
-import logging
 
 logging.basicConfig(
     level=logging.DEBUG,

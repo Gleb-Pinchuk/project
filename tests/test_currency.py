@@ -10,8 +10,8 @@ def test_convert_rub_transaction() -> None:
 
 
 @patch("src.external_api.requests.get")
+@patch("src.external_api.API_KEY", "dummy")
 def test_convert_usd_transaction(mock_get) -> None:
-    # Настраиваем фейковый ответ API
     mock_get.return_value.status_code = 200
     mock_get.return_value.json.return_value = {"result": 7500.0}
 

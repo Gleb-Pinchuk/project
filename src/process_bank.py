@@ -4,11 +4,13 @@ from typing import List, Dict
 
 def process_bank_search(data: List[Dict], search: str) -> List[Dict]:
     """
-    Фильтрует список банковских операций по строке поиска в описании.
+    Фильтрует список операций по слову/регулярному выражению в поле description.
     """
+    if not search.strip():
+        return []
+
     pattern = re.compile(search, re.IGNORECASE)
-    result = [op for op in data if "description" in op and pattern.search(op["description"])]
-    return result
+    return [op for op in data if "description" in op and pattern.search(op["description"])]
 
 
 def process_bank_operations(data: List[Dict], categories: List[str]) -> Dict[str, int]:

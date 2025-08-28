@@ -3,7 +3,7 @@ import csv
 from openpyxl import load_workbook
 from datetime import datetime
 from typing import List, Dict
-from src.process_bank import process_bank_search, process_bank_operations
+from src.process_bank import process_bank_search
 
 
 AVAILABLE_STATUSES = ["EXECUTED", "CANCELED", "PENDING"]

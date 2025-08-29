@@ -6,7 +6,7 @@ from typing import List, Dict
 from src.process_bank import process_bank_search
 
 
-AVAILABLE_STATUSES = ["EXECUTED", "CANCELED", "PENDING"]
+AVAILABLE_STATUSES = ["EXECUTED", "CANCELED", "PENDING"] 
 
 
 def load_from_json(filepath: str) -> List[Dict]:

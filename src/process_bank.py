@@ -1,5 +1,6 @@
 import re
 from typing import List, Dict
+from collections import Counter
 
 
 def process_bank_search(data: List[Dict], search: str) -> List[Dict]:
@@ -15,15 +16,17 @@ def process_bank_search(data: List[Dict], search: str) -> List[Dict]:
 
 def process_bank_operations(data: List[Dict], categories: List[str]) -> Dict[str, int]:
     """
-    Подсчитывает количество банковских операций по категориям.
+    Подсчитывает количество операций по категориям (по description).
     """
-    stats = {cat: 0 for cat in categories}
+    # приводим категории к нижнему регистру для поиска
+    categories_lower = [cat.lower() for cat in categories]
+    counter = Counter()
 
     for op in data:
         desc = op.get("description", "").lower()
-        for cat in categories:
-            if cat.lower() in desc:
-                stats[cat] += 1
-                break  # если операция подходит под одну категорию, дальше не проверяем
+        for i, cat in enumerate(categories_lower):
+            if cat in desc:
+                counter[categories[i]] += 1
+                break
 
-    return stats
+    return {cat: counter.get(cat, 0) for cat in categories}
